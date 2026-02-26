@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Core Variables */
+  --color-background: #ffffff;
+  --color-foreground: #020617;
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Dark Mode Overrides */
+.dark body,
+.dark {
+  --color-background: #020617;
+  --color-foreground: #f8fafc;
+  --color-secondary: #0f172a;
+  --color-secondary-foreground: #f1f5f9;
+}
+
+/* Color Presets */
+[data-color-theme="green"] {
+  --color-primary: #16a34a;
+}
+[data-color-theme="rose"] {
+  --color-primary: #e11d48;
+}
+[data-color-theme="violet"] {
+  --color-primary: #7c3aed;
+}
+[data-color-theme="amber"] {
+  --color-primary: #d97706;
+}
+[data-color-theme="blue"] {
+  --color-primary: #2563eb;
 }
