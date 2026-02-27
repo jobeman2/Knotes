@@ -42,8 +42,8 @@ const Sidebar = () => {
     <aside className="w-64 min-h-screen bg-background border-r border-border flex flex-col p-6 transition-colors font-dm-sans">
       {/* Logo */}
       <div className="flex items-center gap-3 mb-10 px-2">
-        <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center">
-          <span className="text-white dark:text-black font-bold text-lg">
+        <div className="w-8 h-8 bg-foreground dark:bg-background rounded-lg flex items-center justify-center">
+          <span className="text-background dark:text-foreground font-bold text-lg">
             U
           </span>
         </div>
@@ -81,8 +81,8 @@ const Sidebar = () => {
               href={link.href}
               className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all font-medium group ${
                 link.active
-                  ? "bg-muted text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "bg-muted/80 text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -113,9 +113,9 @@ const Sidebar = () => {
         </button>
         <Link
           href="/register"
-          className="w-full flex items-center gap-3 px-3 py-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors font-medium"
+          className="w-full flex items-center gap-3 px-3 py-2 text-muted-foreground hover:text-foreground transition-colors font-medium"
         >
-          <div className="w-5 h-5 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center">
             <span className="text-[10px] font-bold">R</span>
           </div>
           <span className="text-sm">Register / Account</span>

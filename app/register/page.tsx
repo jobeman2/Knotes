@@ -65,19 +65,19 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 transition-colors">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md border border-gray-200 dark:border-gray-700">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">
+      <div className="bg-surface p-8 rounded-2xl shadow-xl w-full max-w-md border border-border/40">
+        <h1 className="text-2xl font-bold mb-6 text-center text-foreground">
           Register
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-gray-700 dark:text-gray-200">
+            <label className="block text-foreground/80 font-medium text-sm">
               Email
             </label>
             <input
               type="email"
               {...register("email")}
-              className="w-full mt-1 p-2 border rounded-md bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
+              className="w-full mt-1.5 p-2.5 border rounded-xl bg-muted/30 border-border/60 text-foreground focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -86,13 +86,13 @@ export default function RegisterPage() {
             )}
           </div>
           <div>
-            <label className="block text-gray-700 dark:text-gray-200">
+            <label className="block text-foreground/80 font-medium text-sm">
               Password
             </label>
             <input
               type="password"
               {...register("password")}
-              className="w-full mt-1 p-2 border rounded-md bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
+              className="w-full mt-1.5 p-2.5 border rounded-xl bg-muted/30 border-border/60 text-foreground focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -103,7 +103,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:opacity-90 text-primary-foreground p-2 rounded-md mt-2 transition-opacity"
+            className="w-full bg-primary hover:opacity-90 text-primary-foreground p-3 rounded-xl mt-4 font-bold transition-all active:scale-[0.98]"
           >
             {loading ? "Registering..." : "Register"}
           </button>
@@ -112,10 +112,7 @@ export default function RegisterPage() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-300 dark:border-gray-600"></span>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
+              <span className="px-2 bg-surface text-muted-foreground text-xs uppercase tracking-wider font-bold">
                 Or continue with
               </span>
             </div>
@@ -124,7 +121,7 @@ export default function RegisterPage() {
           <button
             onClick={handleGoogleSignUp}
             disabled={loading}
-            className="w-full mt-4 flex items-center justify-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+            className="w-full mt-4 flex items-center justify-center gap-2 bg-surface border border-border/60 text-foreground p-3 rounded-xl hover:bg-muted/50 transition-all font-medium active:scale-[0.98]"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path

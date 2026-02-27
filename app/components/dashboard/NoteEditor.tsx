@@ -8,7 +8,7 @@ const NoteEditor = () => {
   return (
     <div className="flex-1 flex flex-col bg-background p-10 font-dm-sans overflow-y-auto">
       {/* Illustration / Image section */}
-      <div className="w-full max-w-2xl mx-auto mb-12 flex justify-center py-10 bg-muted rounded-[3rem] border border-border transition-colors">
+      <div className="w-full max-w-2xl mx-auto mb-12 flex justify-center py-10 bg-muted rounded-[3rem] border border-border/40 transition-colors">
         <div className="relative w-72 h-44 opacity-80 hover:opacity-100 transition-opacity">
           {/* Mocked Illustration using CSS/SVG patterns if I can't generate image right now */}
           <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/10 dark:to-amber-900/20 rounded-2xl flex items-center justify-center border border-primary/10">
@@ -84,10 +84,10 @@ const NoteEditor = () => {
                   className="flex items-center gap-4 group cursor-pointer"
                 >
                   <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                    className={`w-5 h-5 rounded-full border-[1.5px] flex items-center justify-center transition-all ${
                       item.checked
                         ? "bg-primary border-primary shadow-sm"
-                        : "border-border group-hover:border-primary/50"
+                        : "border-border/60 group-hover:border-primary/50"
                     }`}
                   >
                     {item.checked && (
@@ -111,7 +111,7 @@ const NoteEditor = () => {
 
         {/* Floating Toolbars (Mocked from UI) */}
         <div className="fixed bottom-12 right-12 flex items-center gap-4 animate-in slide-in-from-bottom-4 duration-500">
-          <button className="w-12 h-12 bg-surface rounded-2xl shadow-xl flex items-center justify-center text-foreground hover:bg-muted transition-all border border-border active:scale-95">
+          <button className="w-12 h-12 bg-surface rounded-2xl shadow-xl flex items-center justify-center text-foreground hover:bg-muted transition-all border border-border/40 active:scale-95">
             <Plus size={24} />
           </button>
           <button className="px-6 h-12 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-2xl shadow-xl font-bold text-sm transition-all hover:opacity-90 active:scale-95">

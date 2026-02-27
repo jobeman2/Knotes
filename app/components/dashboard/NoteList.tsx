@@ -45,9 +45,9 @@ const NoteList = () => {
   ];
 
   return (
-    <div className="w-96 min-h-screen bg-secondary border-r border-border p-6 flex flex-col font-dm-sans transition-colors">
+    <div className="w-96 min-h-screen border-r border-border p-6 flex flex-col font-dm-sans transition-colors">
       <div className="flex items-center justify-between mb-8 px-2">
-        <h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">
+        <h2 className="text-3xl font-bold text-foreground tracking-tight">
           Notes
         </h2>
         <div className="w-6 h-6 rounded-full border-2 border-amber-400/30 flex items-center justify-center">
