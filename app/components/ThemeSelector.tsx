@@ -3,29 +3,23 @@
 import React, { useState } from "react";
 import { useTheme } from "@/lib/context/ThemeContext";
 
-const colorPresets = [
-  { name: "Blue", value: "blue", class: "bg-blue-600" },
-  { name: "Green", value: "green", class: "bg-green-600" },
-  { name: "Rose", value: "rose", class: "bg-rose-600" },
-  { name: "Violet", value: "violet", class: "bg-violet-600" },
-  { name: "Amber", value: "amber", class: "bg-amber-600" },
-] as const;
-
 const ThemeSelector: React.FC = () => {
-  const { mode, colorTheme, toggleMode, setColorTheme } = useTheme();
+  const { mode, toggleMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
+        className="flex items-center gap-2 p-2 rounded-full border border-border bg-surface hover:bg-muted transition-colors shadow-sm"
         title="Theme Settings"
       >
-        <div className={`w-4 h-4 rounded-full bg-primary`} />
+        <div
+          className={`w-4 h-4 rounded-full bg-primary shadow-sm shadow-amber-500/20`}
+        />
         {mode === "light" ? (
           <svg
-            className="w-5 h-5 text-gray-700"
+            className="w-5 h-5 text-zinc-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor font-bold"
@@ -39,7 +33,7 @@ const ThemeSelector: React.FC = () => {
           </svg>
         ) : (
           <svg
-            className="w-5 h-5 text-gray-200"
+            className="w-5 h-5 text-zinc-300"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -60,42 +54,31 @@ const ThemeSelector: React.FC = () => {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-56 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 animate-in fade-in zoom-in duration-200">
-            <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 uppercase tracking-wider">
+          <div className="absolute right-0 mt-2 w-56 p-4 bg-surface rounded-xl shadow-2xl border border-border z-50 animate-in fade-in zoom-in duration-200">
+            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider px-2">
               Appearance
             </h3>
 
             <button
               onClick={toggleMode}
-              className="w-full flex items-center justify-between p-2 mb-4 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors border border-gray-200 dark:border-gray-600"
+              className="w-full flex items-center justify-between p-3 rounded-xl bg-muted hover:opacity-90 transition-all border border-border shadow-sm"
             >
-              <span className="text-sm font-medium">
-                {mode === "light" ? "Light Mode" : "Dark Mode"}
-              </span>
-              <div className="w-8 h-4 bg-gray-300 dark:bg-gray-500 rounded-full relative">
+              <div className="flex items-center gap-3">
                 <div
-                  className={`absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform ${mode === "dark" ? "translate-x-4" : ""}`}
+                  className={`w-2 h-2 rounded-full bg-primary animate-pulse`}
+                />
+                <span className="text-sm font-bold text-foreground opacity-70">
+                  Dark Mode
+                </span>
+              </div>
+              <div
+                className={`w-10 h-5 rounded-full relative transition-colors ${mode === "dark" ? "bg-amber-500" : "bg-zinc-200"}`}
+              >
+                <div
+                  className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform duration-200 shadow-sm ${mode === "dark" ? "translate-x-5" : ""}`}
                 />
               </div>
             </button>
-
-            <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 uppercase tracking-wider">
-              Color Preset
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {colorPresets.map((preset) => (
-                <button
-                  key={preset.value}
-                  onClick={() => setColorTheme(preset.value)}
-                  className={`w-8 h-8 rounded-full ${preset.class} border-2 transition-all ${
-                    colorTheme === preset.value
-                      ? "border-black dark:border-white scale-110 shadow-md"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
-                  title={preset.name}
-                />
-              ))}
-            </div>
           </div>
         </>
       )}
