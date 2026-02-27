@@ -2,8 +2,11 @@
 
 import React from "react";
 import NoteCard from "./NoteCard";
+import { useUIState } from "@/lib/context/UIStateContext";
+import { ChevronLeft } from "lucide-react";
 
 const NoteList = () => {
+  const { setActiveMobileView } = useUIState();
   const notes = [
     {
       title: "Grocery list / Stores",
