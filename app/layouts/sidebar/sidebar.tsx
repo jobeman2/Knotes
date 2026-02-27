@@ -18,9 +18,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUIState } from "@/lib/context/UIStateContext";
+import { X } from "lucide-react";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const { isSidebarOpen, setSidebarOpen } = useUIState();
 
   const mainLinks = [
     { icon: LayoutTemplate, label: "Templates", href: "/templates" },
@@ -39,8 +42,12 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-background border-r border-border flex flex-col p-6 transition-colors font-dm-sans">
-      {/* Logo */}
+    <aside
+      className={`fixed inset-y-0 left-0 w-64 bg-background border-r border-border flex flex-col p-6 transition-all duration-300 z-50 lg:static lg:translate-x-0 ${
+        isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+      } font-dm-sans`}
+    >
+      {/* Logo & Close */}
       <div className="flex items-center gap-3 mb-10 px-2">
         <div className="w-8 h-8 bg-foreground dark:bg-background rounded-lg flex items-center justify-center">
           <span className="text-background dark:text-foreground font-bold text-lg">
@@ -50,7 +57,13 @@ const Sidebar = () => {
         <span className="font-bold text-xl tracking-tight text-foreground">
           Awsmd
         </span>
-        <button className="ml-auto text-muted-foreground hover:text-foreground transition-colors">
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="ml-auto text-muted-foreground hover:text-foreground transition-colors lg:hidden"
+        >
+          <X size={20} />
+        </button>
+        <button className="hidden lg:block ml-auto text-muted-foreground hover:text-foreground transition-colors">
           <MoreHorizontal size={18} />
         </button>
       </div>

@@ -12,6 +12,8 @@ interface NoteCardProps {
   hasCircle?: boolean;
 }
 
+import { useUIState } from "@/lib/context/UIStateContext";
+
 const NoteCard: React.FC<NoteCardProps> = ({
   title,
   excerpt,
@@ -20,8 +22,11 @@ const NoteCard: React.FC<NoteCardProps> = ({
   active,
   hasCircle,
 }) => {
+  const { setActiveMobileView } = useUIState();
+
   return (
     <div
+      onClick={() => setActiveMobileView("editor")}
       className={`p-5 rounded-3xl transition-all cursor-pointer group mb-2 border ${
         active
           ? "bg-amber-100/40 dark:bg-amber-900/20 border-amber-200/60 dark:border-amber-800/40"

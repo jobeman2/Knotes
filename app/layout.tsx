@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/lib/context/ThemeContext";
+import { UIStateProvider } from "@/lib/context/UIStateContext";
 
 export default function RootLayout({
   children,
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <UIStateProvider>{children}</UIStateProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

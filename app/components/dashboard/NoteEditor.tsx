@@ -2,11 +2,22 @@
 
 import React from "react";
 import Image from "next/image";
-import { Plus, Type, MoreHorizontal } from "lucide-react";
+import { Plus, Type, MoreHorizontal, ChevronLeft } from "lucide-react";
+import { useUIState } from "@/lib/context/UIStateContext";
 
 const NoteEditor = () => {
+  const { setActiveMobileView } = useUIState();
+
   return (
-    <div className="flex-1 flex flex-col bg-background p-10 font-dm-sans overflow-y-auto">
+    <div className="flex-1 flex flex-col bg-background p-6 lg:p-10 font-dm-sans overflow-y-auto">
+      {/* Mobile Back Button */}
+      <button
+        onClick={() => setActiveMobileView("list")}
+        className="lg:hidden flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+      >
+        <ChevronLeft size={20} />
+        <span className="text-sm font-bold uppercase tracking-wider">Back</span>
+      </button>
       {/* Illustration / Image section */}
       <div className="w-full max-w-2xl mx-auto mb-12 flex justify-center py-10 bg-muted rounded-[3rem] border border-border/40 transition-colors">
         <div className="relative w-72 h-44 opacity-80 hover:opacity-100 transition-opacity">
