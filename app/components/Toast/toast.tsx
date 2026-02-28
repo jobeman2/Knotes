@@ -9,7 +9,7 @@ interface ToastProps {
 }
 
 /**
- * A modern, minimal Toast component that displays a message for a specified duration.
+ * Toast component that displays a message for a specified duration.
  *
  * @param {ToastProps} props - The properties for the Toast component.
  * @param {string} props.message - The message to display in the toast.

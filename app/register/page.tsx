@@ -2,30 +2,17 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import axiosInstance from "@/lib/axios";
 import { useState } from "react";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 import { useToast } from "@/app/components/Toast/ToastContext";
 import Link from "next/link";
 import { Mail, Lock, Chrome, Sparkles, ArrowRight } from "lucide-react";
+import { registerSchema, RegisterFormData } from "@/lib/validations/auth";
 
 import Input from "@/app/components/UI/input/input";
 import Button from "@/app/components/UI/button/button";
-
-const registerSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" })
-    .regex(/[A-Z]/, {
-      message: "Password must contain at least one uppercase letter",
-    })
-    .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -34,10 +21,14 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
+    watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
   });
+
+  const passwordValue = watch("password", "");
 
   const onSubmit = async (data: RegisterFormData) => {
     setLoading(true);
@@ -46,13 +37,17 @@ export default function RegisterPage() {
       const res = await axiosInstance.post("/auth/register", data);
 
       if (res.data.success) {
-        showToast("Registration successful!", "success");
+        showToast("Registration successful! Welcome aboard.", "success");
+        // Redirect logic could go here
       } else {
         showToast(res.data.error || "Registration failed", "error");
       }
     } catch (err: any) {
       const errorMessage =
-        err.response?.data?.error || err.message || "Something went wrong";
+        err.response?.data?.error ||
+        err.response?.data?.details?.[0]?.message ||
+        err.message ||
+        "Something went wrong";
 
       showToast(errorMessage, "error");
     } finally {
@@ -64,10 +59,17 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await signInWithPopup(auth, googleProvider);
-      showToast("Google registration successful!", "success");
+      const result = await signInWithPopup(auth, googleProvider);
+      if (result.user) {
+        showToast("Successfully signed up with Google!", "success");
+      }
     } catch (err: any) {
-      showToast(err.message || "Google sign up failed", "error");
+      // Handle "popup closed by user" specifically
+      if (err.code === "auth/popup-closed-by-user") {
+        showToast("Sign up cancelled", "info");
+      } else {
+        showToast(err.message || "Google sign up failed", "error");
+      }
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,7 @@ export default function RegisterPage() {
           <Sparkles className="w-6 h-6 text-primary" />
           <h2 className="text-2xl font-light text-foreground/80">Welcome to</h2>
         </div>
-        <h1 className="text-4xl font-bold  text-primary">Knotes</h1>
+        <h1 className="text-4xl font-bold text-primary">Knotes</h1>
       </div>
 
       <div className="relative w-full max-w-md">
@@ -129,33 +131,45 @@ export default function RegisterPage() {
             </div>
 
             {/* Password requirements hint */}
-            <div className="text-xs text-muted-foreground space-y-1 bg-muted/30 p-3 rounded-xl">
-              <p className="font-medium mb-1">Password must contain:</p>
-              <ul className="space-y-1">
-                <li className="flex items-center gap-1">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${errors.password ? "bg-red-500" : "bg-green-500"}`}
-                  />
-                  At least 6 characters
-                </li>
-                <li className="flex items-center gap-1">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${errors.password ? "bg-red-500" : "bg-green-500"}`}
-                  />
-                  One uppercase letter
-                </li>
-                <li className="flex items-center gap-1">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${errors.password ? "bg-red-500" : "bg-green-500"}`}
-                  />
-                  One number
-                </li>
+            <div className="text-xs text-muted-foreground space-y-2 bg-muted/30 p-3 rounded-xl">
+              <p className="font-medium mb-1">Password requirements:</p>
+              <ul className="space-y-1.5">
+                {[
+                  {
+                    label: "At least 6 characters",
+                    met: passwordValue.length >= 6,
+                  },
+                  {
+                    label: "One uppercase letter",
+                    met: /[A-Z]/.test(passwordValue),
+                  },
+                  { label: "One number", met: /[0-9]/.test(passwordValue) },
+                ].map((req, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center gap-2 transition-all"
+                  >
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                        req.met ? "bg-emerald-500" : "bg-zinc-400"
+                      }`}
+                    />
+                    <span
+                      className={
+                        req.met ? "text-emerald-600 dark:text-emerald-400" : ""
+                      }
+                    >
+                      {req.label}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
 
             <Button
               type="submit"
               loading={loading}
+              disabled={!isValid}
               className="w-full group relative overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">

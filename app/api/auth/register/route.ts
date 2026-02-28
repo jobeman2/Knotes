@@ -1,40 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
-const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
+import { registerSchema } from "@/lib/validations/auth";
+import { ZodError } from "zod";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, password } = registerSchema.parse(body);
+    const validatedData = registerSchema.parse(body);
 
     const userCredential = await createUserWithEmailAndPassword(
       auth,
-      email,
-      password,
+      validatedData.email,
+      validatedData.password,
     );
 
     return NextResponse.json({
       success: true,
-      uid: userCredential.user.uid,
-      email: userCredential.user.email,
+      data: {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+      },
     });
-  } catch (err: any) {
-    console.error("Registration error:", err);
-    if (err instanceof z.ZodError) {
+  } catch (error: any) {
+    console.error("Registration Error:", error);
+
+    if (error instanceof ZodError) {
       return NextResponse.json(
-        { success: false, error: err.errors[0].message },
+        {
+          success: false,
+          error: "Validation failed",
+          details: error.errors.map((e: any) => ({
+            path: e.path.join("."),
+            message: e.message,
+          })),
+        },
         { status: 400 },
       );
     }
+
+    // Firebase Error Mapping
+    let errorMessage = "Failed to create account";
+    let statusCode = 400;
+
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        errorMessage = "This email is already registered";
+        break;
+      case "auth/invalid-email":
+        errorMessage = "Invalid email address";
+        break;
+      case "auth/operation-not-allowed":
+        errorMessage = "Email/password registration is not enabled";
+        statusCode = 403;
+        break;
+      case "auth/weak-password":
+        errorMessage = "The password is too weak";
+        break;
+      default:
+        errorMessage = error.message || "An unexpected error occurred";
+    }
+
     return NextResponse.json(
-      { success: false, error: err.message || "Failed to register" },
-      { status: 400 },
+      { success: false, error: errorMessage },
+      { status: statusCode },
     );
   }
 }
